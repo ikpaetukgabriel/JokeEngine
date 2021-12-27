@@ -1,6 +1,7 @@
 package com.example.jokeengine.client;
 
 import com.example.jokeengine.model.Jokes;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -11,9 +12,9 @@ public class JokeRepoClient {
 
   private final WebClient webClient;
 
-  public JokeRepoClient(Jokes jokes, WebClient.Builder webClientBuilder) {
+  public JokeRepoClient(WebClient.Builder webClientBuilder, @Value("${jokeRepo.url}") String baseUrl) {
     this.webClient = webClientBuilder
-        .baseUrl("http://localhost:8000")
+        .baseUrl(baseUrl)
         .build();
   }
 
