@@ -21,7 +21,10 @@ public class JokeEngineController {
   }
 
   @GetMapping(value = "/get-engine-jokes", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Jokes> getJokesEndpoint(@RequestParam String number) {
+  public ResponseEntity<Jokes> getJokesEndpoint(@RequestParam(
+          name = "number",
+          required = false,
+          defaultValue = "1") String number) {
     Jokes jokes111 = jokeEngineServiceImpl.getRandomJokes(number);
     return new ResponseEntity<>(jokes111, HttpStatus.OK);
   }
