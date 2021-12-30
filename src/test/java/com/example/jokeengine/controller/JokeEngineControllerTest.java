@@ -36,7 +36,7 @@ class JokeEngineControllerTest {
   private JokeRepoClient jokeRepoClient;
 
   @BeforeEach
-  void init() {
+  void setUp() {
     Jokes jokes  = generateJokesForTesting();
     // Mocks the response from the external api call from jokeRepoClient.getJokes()
     when(jokeRepoClient.getJokes()).thenReturn(jokes);
@@ -61,6 +61,24 @@ class JokeEngineControllerTest {
 
     assertEquals(Integer.valueOf(parameterValue),
             jokesFromMvcResult.getJokes().size());
+  }
+
+  @Test
+  public void test_getJokesEndpoint_noRequestParam() throws Exception {
+
+    MvcResult mvcResult = mockMvc.perform(get("/get-engine-jokes")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String jokesAsStringFromMvcResult = mvcResult.getResponse().getContentAsString();
+    Jokes jokesFromMvcResult = objectMapper.readValue(jokesAsStringFromMvcResult, Jokes.class);
+
+    assertThat(jokesFromMvcResult)
+            .hasFieldOrProperty("jokes")
+            .hasNoNullFieldsOrProperties();
+
+    assertEquals(1, jokesFromMvcResult.getJokes().size());
   }
 
   private Jokes generateJokesForTesting() {
